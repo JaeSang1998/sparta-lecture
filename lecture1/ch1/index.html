@@ -1,9 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body></body>
+  <script>
+    function changeMode() {
+      const mode = document.querySelector("#mode").value;
+      const bodyTag = document.querySelector("body");
+      const as = document.querySelectorAll("li");
+
+      if (mode === "day") {
+        console.log("day click");
+        bodyTag.style.backgroundColor = "black";
+        bodyTag.style.color = "white";
+        document.querySelector("#mode").value = "night";
+
+        let i = 0;
+        while (i < as.length) {
+          as[i].style.color = "red";
+          i += 1;
+        }
+      } else {
+        console.log("night click");
+        bodyTag.style.backgroundColor = "white";
+        bodyTag.style.color = "black";
+        document.querySelector("#mode").value = "day";
+        let i = 0;
+        while (i < as.length) {
+          as[i].style.color = "blue";
+          i += 1;
+        }
+      }
+    }
+  </script>
+  <body>
+    <input type="button" id="mode" onclick="changeMode()" value="day" />
+    <li>한개</li>
+    <li>두개</li>
+  </body>
 </html>
