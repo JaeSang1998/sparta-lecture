@@ -7,58 +7,37 @@ import {
 import { authService } from "./module/auth/nbcbaseAuth";
 import { useState } from "react";
 
+// 이 코드도 개선점이 많은 코드이나 이런식으로 바꿔갈 수 있다는 감을 잡으시면 좋을 것 같습니다.
+
+const SOCIAL_LIST = ["google", "github"];
 function App() {
   const [user, setUser] = useState({ token: "", userName: "" });
 
-  const signInWithGoogle = () => {
-    const googleProvider = new GoogleAuthProvider();
-    return signInWithPopup(authService, googleProvider);
-  };
+  const signInWith = async (what) => {
+    let Provider;
+    if (what === "google") {
+      Provider = GoogleAuthProvider;
+    }
+    if (what === "github") {
+      Provider = GithubAuthProvider;
+    }
 
-  const signInWithGithub = () => {
-    const githubProvider = new GithubAuthProvider();
-    return signInWithPopup(authService, githubProvider);
-  };
+    const res = await signInWithPopup(authService, new Provider());
+    const credential = Provider.credentialFromResult(res); // 사용 설명서
+    const token = credential.accessToken;
+    const userName = res.user.displayName;
 
-  const socialGoogleLoginhandler = async (event) => {
-    event.preventDefault();
-    await signInWithGoogle()
-      .then((res) => {
-        const credential = GoogleAuthProvider.credentialFromResult(res);
-        const token = credential.accessToken;
-        const userName = res.user.displayName;
-
-        setUser({ token, userName });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  const socialGithubLoginhandler = async (event) => {
-    event.preventDefault();
-    await signInWithGithub()
-      .then((res) => {
-        const credential = GithubAuthProvider.credentialFromResult(res);
-        const token = credential.accessToken;
-        const userName = res.user.displayName;
-
-        setUser({ token, userName });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    setUser({ token, userName });
   };
 
   return (
     <div>
       <h2>소셜 로그인</h2>
 
-      <form method="post">
-        <br />
-        <button onClick={socialGoogleLoginhandler}>구글로그인</button>
-        <button onClick={socialGithubLoginhandler}>깃허브로그인</button>
-      </form>
+      {SOCIAL_LIST.map((social) => (
+        <button onClick={() => signInWith(social)}>{social}로그인</button>
+      ))}
+
       <h3>{user.token}</h3>
       <h3>{user.userName}</h3>
     </div>
