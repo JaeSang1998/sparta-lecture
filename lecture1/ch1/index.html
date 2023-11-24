@@ -1,32 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
   <script>
-    function changeMode() {
-      const mode = document.querySelector("#mode").value;
+    function changeColor(bgColor, color, changedMode, itemColor) {
       const bodyTag = document.querySelector("body");
       const as = document.querySelectorAll("li");
 
-      if (mode === "day") {
-        console.log("day click");
-        bodyTag.style.backgroundColor = "black";
-        bodyTag.style.color = "white";
-        document.querySelector("#mode").value = "night";
+      bodyTag.style.backgroundColor = bgColor;
+      bodyTag.style.color = color;
+      document.querySelector("#mode").value = changedMode;
+      let i = 0;
+      while (i < as.length) {
+        as[i].style.color = itemColor;
+        i += 1;
+      }
+    }
 
-        let i = 0;
-        while (i < as.length) {
-          as[i].style.color = "red";
-          i += 1;
-        }
+    function changeMode() {
+      const mode = document.querySelector("#mode").value;
+      if (mode === "day") {
+        changeColor("black", "white", "night", "red");
       } else {
-        console.log("night click");
-        bodyTag.style.backgroundColor = "white";
-        bodyTag.style.color = "black";
-        document.querySelector("#mode").value = "day";
-        let i = 0;
-        while (i < as.length) {
-          as[i].style.color = "blue";
-          i += 1;
-        }
+        changeColor("white", "black", "day", "blue");
       }
     }
   </script>
